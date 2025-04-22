@@ -1,60 +1,20 @@
-const Header = ({ course }) => {
-  console.log("Rendering Header");
-  return <h1>{course}</h1>;
-};
-
-const Part = ({ name, exercises }) => {
-  return (
-    <p>
-      {name} {exercises}
-    </p>
-  );
-};
-
-const Content = ({ parts }) => {
-  console.log("Rendering Content");
-  return (
-    <div>
-      <Part {...parts[0]} />
-      <Part {...parts[1]} />
-      <Part {...parts[2]} />
-    </div>
-  );
-};
-
-const Total = ({ parts }) => {
-  console.log("Rendering Total");
-  return (
-    <p>Number of exercises {parts.reduce((sum, part) => sum + part.exercises, 0)}</p>
-  );
-};
+import { useState } from 'react'
 
 const App = () => {
-  const course = {
-    name: 'Half Stack application development',
-    parts: [
-      {
-        name: 'Fundamentals of React',
-        exercises: 10
-      },
-      {
-        name: 'Using props to pass data',
-        exercises: 7
-      },
-      {
-        name: 'State of a component',
-        exercises: 14
-      }
-    ]
-  };
+
+  const [ counter, setCounter ] = useState(0)
+
+
+  setTimeout(
+    () => setCounter(counter + 1),
+    1000
+  )
+
+  console.log('rendering...', counter)
 
   return (
-    <div>
-      <Header course={course.name} />
-      <Content parts={course.parts} />
-      <Total parts={course.parts} />
-    </div>
-  );
-};
+    <div>{counter}</div>
+  )
+}
 
-export default App;
+export default App
