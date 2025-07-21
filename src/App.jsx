@@ -1,34 +1,3 @@
-//import { useState } from 'react'
-
-//const Display = props => <div>{props.value}</div>
-
-//const Button = (props) => (
-//  <button onClick={props.onClick}>
-//    {props.text}
-//  </button>
-//)
-//
-//const App = () => {
-//  const [value, setValue] = useState(10)
-
-//  const setToValue = newValue => {
-//    console.log('value now', newValue)
-//    setValue(newValue)
-//  }
-
-//  return (
-//    <div>
-//      <Display value={value} />
-//      <Button onClick={() => setToValue(1000)} text="thousand" />
-//      <Button onClick={() => setToValue(0)} text="reset" />
-//      <Button onClick={() => setToValue(value + 1)} text="increment" />
-//    </div>
-//  )
-//}
-
-//export default App 
-
-
 import { useState } from 'react'
 
 const Button = (props) => (
@@ -38,10 +7,13 @@ const Button = (props) => (
 )
 
 const App = () => {
-  // tallenna napit omaan tilaansa
   const [good, setGood] = useState(0)
   const [neutral, setNeutral] = useState(0)
   const [bad, setBad] = useState(0)
+
+  const total = good + neutral + bad
+  const average = total === 0 ? 0 : (good - bad) / total
+  const positive = total === 0 ? 0 : (good / total) * 100
 
   return (
     <div>
@@ -53,6 +25,9 @@ const App = () => {
       <p>Good {good}</p>
       <p>Neutral {neutral}</p>
       <p>Bad {bad}</p>
+      <p>All {total}</p>
+      <p>Average {average}</p>
+      <p>Positive {positive}%</p>
     </div>
   )
 }
