@@ -26,6 +26,16 @@ const App = () => {
     setNewName('')
   }
 
+  setTimeout(() => {
+  console.log('loop..')
+  let i = 0
+  while (i < 99) {
+    i++
+    console.log(i)
+  }
+  console.log('end')
+}, 5000)
+
   return (
     <div>
       <h2>Phonebook</h2>
