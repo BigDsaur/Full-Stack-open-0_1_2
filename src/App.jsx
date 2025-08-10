@@ -3,28 +3,24 @@ import axios from 'axios'
 import Phonebook from './components/Phonebook'
 
 const App = () => {
-  const [notes, setNotes] = useState([])
+  const [persons, setPersons] = useState([])
+  const [newName, setNewName] = useState('')
+  const [newNumber, setNewNumber] = useState('')
+  const [filter, setFilter] = useState('')
 
+  // Fetch data on mount
   useEffect(() => {
     console.log('effect')
     axios
       .get('http://localhost:3001/persons')
       .then(response => {
         console.log('promise fulfilled')
-        setNotes(response.data)
+        setPersons(response.data)
+      })
+      .catch(error => {
+        console.error('Error fetching persons:', error)
       })
   }, [])
-
-  const [persons, setPersons] = useState([
-    { name: 'Arto Hellas', number: '040-123456' },
-    { name: 'Ada Lovelace', number: '39-44-5323523' },
-    { name: 'Dan Abramov', number: '12-43-234345' },
-    { name: 'Mary Poppendieck', number: '39-23-6423122' }
-  ]) 
-
-  const [newName, setNewName] = useState('')
-  const [newNumber, setNewNumber] = useState('')
-  const [filter, setFilter] = useState('')
 
   const addPerson = (event) => {
     event.preventDefault()
@@ -35,10 +31,11 @@ const App = () => {
       return
     }
 
-    const personObject = { name: newName, number: newNumber }
+    const personObject = { name: newName, number: newNumber, id: (persons.length + 1).toString() }
     setPersons(persons.concat(personObject))
     setNewName('')
     setNewNumber('')
+    
   }
 
   return (
