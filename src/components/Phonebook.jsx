@@ -1,10 +1,12 @@
 const Phonebook = ({
   persons,
-  newName,
   filter,
-  onNameChange,
+  newName,
+  newNumber,
   onFilterChange,
-  onAddName
+  onNameChange,
+  onNumberChange,
+  onAddPerson
 }) => {
   const filteredPersons = persons.filter(person =>
     person.name.toLowerCase().includes(filter.toLowerCase())
@@ -13,22 +15,29 @@ const Phonebook = ({
   return (
     <div>
       <div>
-        filter shown with: <input value={filter} onChange={onFilterChange} />
+        filter shown with: 
+        <input value={filter} onChange={onFilterChange} />
       </div>
 
-      <form onSubmit={onAddName}>
+      <h3>Add a new</h3>
+      <form onSubmit={onAddPerson}>
         <div>
           name: <input value={newName} onChange={onNameChange} />
+        </div>
+        <div>
+          number: <input value={newNumber} onChange={onNumberChange} />
         </div>
         <div>
           <button type="submit">add</button>
         </div>
       </form>
 
-      <h2>Names</h2>
+      <h2>Numbers</h2>
       <ul>
         {filteredPersons.map((person, index) => (
-          <li key={index}>{person.name}</li>
+          <li key={index}>
+            {person.name}  {person.number}
+          </li>
         ))}
       </ul>
     </div>
