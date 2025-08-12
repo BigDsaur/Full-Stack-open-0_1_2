@@ -1,59 +1,64 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
-import Phonebook from './components/Phonebook'
+import Note from './components/Note'
 
-const App = () => {
-  const [persons, setPersons] = useState([])
-  const [newName, setNewName] = useState('')
-  const [newNumber, setNewNumber] = useState('')
-  const [filter, setFilter] = useState('')
+const App = (props) => {
+  const [notes, setNotes] = useState([])
+  const [newNote, setNewNote] = useState('') 
+  const [showAll, setShowAll] = useState(true)
 
-  // Fetch data on mount
   useEffect(() => {
     console.log('effect')
     axios
-      .get('http://localhost:3001/persons')
+      .get('http://localhost:3001/notes')
       .then(response => {
         console.log('promise fulfilled')
-        setPersons(response.data)
+        setNotes(response.data)
       })
       .catch(error => {
-        console.error('Error fetching persons:', error)
+        console.error('Error fetching notes:', error)
       })
   }, [])
 
-  const addPerson = (event) => {
+  const addNote = (event) => {
     event.preventDefault()
-
-    const nameExists = persons.some(person => person.name === newName)
-    if (nameExists) {
-      alert(`${newName} is already added to the phonebook`)
-      return
+    console.log('button clicked', event.target)
+    const noteObject = {
+      content: newNote,
+      important: Math.random() > 0.5,
+      id: String(notes.length + 1),
     }
 
-    const personObject = { name: newName, number: newNumber, id: (persons.length + 1).toString() }
-    setPersons(persons.concat(personObject))
-    setNewName('')
-    setNewNumber('')
-    
+    setNotes(notes.concat(noteObject))
+    setNewNote('')
   }
 
+  const handleNoteChange = (event) => {
+    console.log(event.target.value)
+    setNewNote(event.target.value)
+  }
+
+  const notesToShow = showAll? notes: notes.filter(note => note.important)
+  
   return (
     <div>
-      <h2>Phonebook</h2>
-      <Phonebook
-        persons={persons}
-        filter={filter}
-        newName={newName}
-        newNumber={newNumber}
-        onFilterChange={(e) => setFilter(e.target.value)}
-        onNameChange={(e) => setNewName(e.target.value)}
-        onNumberChange={(e) => setNewNumber(e.target.value)}
-        onAddPerson={addPerson}
-      />
+      <h1>Notes</h1>
+      <div>
+        <button onClick={() => setShowAll(!showAll)}>
+          show {showAll ? 'important' : 'all' }
+        </button>
+      </div>  
+      <ul>
+        {notesToShow.map(note =>
+          <Note key={note.id} note={note} />
+        )}
+      </ul>
+      <form onSubmit={addNote}>
+        <input value={newNote} onChange={handleNoteChange} />
+        <button type="submit">save</button>
+      </form>
     </div>
   )
 }
 
-
-export default App
+export default App 
