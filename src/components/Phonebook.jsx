@@ -32,6 +32,7 @@ const Phonebook = ({
         </div>
       </form>
 
+
       <h2>Numbers</h2>
       <ul>
         {filteredPersons.map((person, index) => (
