@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 import Phonebook from './components/Phonebook'
-import PersonsService from './services/persons'
 
 const App = () => {
   const [persons, setPersons] = useState([])
@@ -12,7 +11,7 @@ const App = () => {
   // Fetch data on mount
   useEffect(() => {
     console.log('effect')
-    PersonsService
+    axios
       .get('http://localhost:3001/persons')
       .then(response => {
         console.log('promise fulfilled')
