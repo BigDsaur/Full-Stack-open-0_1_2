@@ -31,11 +31,20 @@ const App = () => {
       return
     }
 
-    const personObject = { name: newName, number: newNumber, id: (persons.length + 1).toString() }
+    const personObject = { 
+      name: newName,
+      number: newNumber,
+      //id: (persons.length + 1).toString()
+    }
+
+    axios
+      .post('http://localhost:3001/persons', personObject)
+      .then(response => {
+        console.log('promise fulfilled')
+      })
     setPersons(persons.concat(personObject))
     setNewName('')
     setNewNumber('')
-    
   }
 
   return (
