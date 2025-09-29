@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
 import Phonebook from './components/Phonebook'
+import person from './services/person';
 
 const App = () => {
   const [persons, setPersons] = useState([])
@@ -11,8 +11,8 @@ const App = () => {
   // Fetch data on mount
   useEffect(() => {
     console.log('effect')
-    axios
-      .get('http://localhost:3001/persons')
+    person
+      .getAll()
       .then(response => {
         console.log('promise fulfilled')
         setPersons(response.data)
@@ -37,10 +37,10 @@ const App = () => {
       //id: (persons.length + 1).toString()
     }
 
-    axios
-      .post('http://localhost:3001/persons', personObject)
+    person
+      .create(personObject)
       .then(response => {
-        console.log('promise fulfilled')
+        console.log(response)
       })
     setPersons(persons.concat(personObject))
     setNewName('')
@@ -63,7 +63,5 @@ const App = () => {
     </div>
   )
 }
-
-
 
 export default App
