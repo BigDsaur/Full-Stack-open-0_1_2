@@ -6,7 +6,8 @@ const Phonebook = ({
   onFilterChange,
   onNameChange,
   onNumberChange,
-  onAddPerson
+  onAddPerson,
+  ondeleteperson
 }) => {
   const filteredPersons = persons.filter(person =>
     person.name.toLowerCase().includes(filter.toLowerCase())
@@ -38,6 +39,7 @@ const Phonebook = ({
         {filteredPersons.map((person, index) => (
           <li key={index}>
             {person.name}  {person.number}
+            <button onClick={() => ondeleteperson(person.id)}>remove</button>
           </li>
         ))}
       </ul>

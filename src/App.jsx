@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import Phonebook from './components/Phonebook'
-import person from './services/person';
+import personservice from './services/person';
 
 const App = () => {
   const [persons, setPersons] = useState([])
@@ -11,7 +11,7 @@ const App = () => {
   // Fetch data on mount
   useEffect(() => {
     console.log('effect')
-    person
+    personservice
       .getAll()
       .then(response => {
         console.log('promise fulfilled')
@@ -34,18 +34,36 @@ const App = () => {
     const personObject = { 
       name: newName,
       number: newNumber,
-      //id: (persons.length + 1).toString()
     }
 
-    person
+    personservice
       .create(personObject)
       .then(response => {
         console.log(response)
+        setPersons(persons.concat(personObject))
+        setNewName('')
+        setNewNumber('')
       })
-    setPersons(persons.concat(personObject))
-    setNewName('')
-    setNewNumber('')
+    }
+  const deleteperson = (id) => {
+    const personToDelete = persons.find(p => p.id === id)
+    if (!personToDelete) return
+
+    const ok = window.confirm(`Delete ${personToDelete.name}?`)
+    if (!ok) return
+
+
+  personservice
+    .remove(id)
+    .then(() => {
+      setPersons(prev => prev.filter(p => p.id !== id))
+    })
+    .catch(error => {
+      console.log('Error deleting', error);
+      alert("Error deleting person")
+    })
   }
+
 
   return (
     <div>
@@ -59,6 +77,7 @@ const App = () => {
         onNameChange={(e) => setNewName(e.target.value)}
         onNumberChange={(e) => setNewNumber(e.target.value)}
         onAddPerson={addPerson}
+        ondeleteperson={deleteperson}
       />
     </div>
   )

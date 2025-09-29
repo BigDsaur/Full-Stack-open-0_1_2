@@ -1,4 +1,3 @@
-// src/services/notes.js
 import axios from 'axios'
 
 const baseUrl = 'http://localhost:3001/persons'
@@ -15,8 +14,13 @@ const update = (id, newObject) => {
   return axios.put(`${baseUrl}/${id}`, newObject)
 }
 
+const remove = (id) => {
+  return axios.delete(`${baseUrl}/${id}`)
+}
+
 export default {
   getAll,
   create,
-  update
+  update,
+  remove
 }
