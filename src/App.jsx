@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import Phonebook from './components/Phonebook'
+import Notification from './components/Notification'
 import personservice from './services/person';
 
 const App = () => {
@@ -7,6 +8,7 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filter, setFilter] = useState('')
+  const [notification, setNotification] = useState({ message: null, type: '' })
 
   // Fetch data on mount
   useEffect(() => {
@@ -19,8 +21,16 @@ const App = () => {
       })
       .catch(error => {
         console.error('Error fetching persons:', error)
+        showNotification('Failed to fetch persons', 'error')
       })
   }, [])
+
+  const showNotification = (message, type = 'success') => {
+    setNotification({ message, type })
+    setTimeout(() => {
+      setNotification({ message: null, type: '' })
+    }, 3000) // lasts 3 seconds
+  }
 
   const addPerson = (event) => {
     event.preventDefault()
@@ -42,7 +52,11 @@ const App = () => {
         setPersons(prev => prev.concat(response.data)) // response.data has real id
         setNewName('')
         setNewNumber('')
-  })
+        showNotification(`Added ${response.data.name}`, 'success')
+      })
+      .catch(() => {
+        showNotification('Error adding person', 'error')
+      })
     }
   const deleteperson = (id) => {
     const personToDelete = persons.find(p => p.id === id)
@@ -56,17 +70,18 @@ const App = () => {
     .remove(id)
     .then(() => {
       setPersons(prev => prev.filter(p => p.id !== id))
+      showNotification(`Deleted ${personToDelete.name}`, 'success')
     })
-    .catch(error => {
-      console.log('Error deleting', error);
-      alert("Error deleting person")
-    })
+    .catch(() => {
+        showNotification(`Failed to delete ${personToDelete.name}`, 'error')
+      })
   }
 
 
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={notification.message} type={notification.type} />
       <Phonebook
         persons={persons}
         filter={filter}
