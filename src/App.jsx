@@ -39,11 +39,10 @@ const App = () => {
     personservice
       .create(personObject)
       .then(response => {
-        console.log(response)
-        setPersons(persons.concat(personObject))
+        setPersons(prev => prev.concat(response.data)) // response.data has real id
         setNewName('')
         setNewNumber('')
-      })
+  })
     }
   const deleteperson = (id) => {
     const personToDelete = persons.find(p => p.id === id)
